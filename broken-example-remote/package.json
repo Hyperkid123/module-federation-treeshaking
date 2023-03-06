@@ -24,7 +24,7 @@
   },
   "version": "1.0.0",
   "description": "My webpack project",
-  "name": "broken-example-host",
+  "name": "broken-example-remote",
   "scripts": {
     "build": "webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development",
@@ -34,7 +34,7 @@
     "analyze": "ANALYZE=true webpack --mode=production --node-env=production"
   },
   "dependencies": {
-    "@patternfly/react-core": "4.276.5",
+    "@patternfly/react-core": "4.276.6",
     "@patternfly/react-icons": "4.93.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

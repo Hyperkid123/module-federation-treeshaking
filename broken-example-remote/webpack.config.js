@@ -11,10 +11,10 @@ const runAnalyze = process.env.ANALYZE == 'true';
 const stylesHandler = MiniCssExtractPlugin.loader;
 
 const moduleFederationPlugin = new ModuleFederationPlugin({
-  name: 'host',
-  filename: 'host.[fullhash].js',
-  remotes: {
-    'brokenRemote': 'brokenRemote@http://localhost:9001/brokenRemote.js'
+  name: 'brokenRemote',
+  filename: 'brokenRemote.js',
+  exposes: {
+    "./BrokenButton": path.resolve(__dirname, './src/App.tsx')
   },
   shared: [
     // required shared modules
@@ -23,8 +23,7 @@ const moduleFederationPlugin = new ModuleFederationPlugin({
     // PF modules will break the tree shaking in this exmaple due to marking PF index file
     {
       '@patternfly/react-core': {
-        // change version to show module duplication
-        requiredVersion: '4.276.5',
+        requiredVersion: '4.276.6',
       },
     },
   ],
@@ -87,13 +86,16 @@ const config = {
   resolve: {
     extensions: ['.tsx', '.ts', '.jsx', '.js', '...'],
   },
+  devServer: {
+    port: 9001,
+    client: {
+      overlay: false
+    }
+  }
 };
 
 module.exports = () => {
-  if (isProduction) {
-    config.mode = 'production';
-  } else {
-    config.mode = 'development';
-  }
+  // we always want production verison of remote bundle
+  config.mode = 'production';
   return config;
 };
