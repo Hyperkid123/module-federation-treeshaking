@@ -5,7 +5,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { ModuleFederationPlugin } = require('webpack').container;
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-const isProduction = process.env.NODE_ENV == 'production';
 const runAnalyze = process.env.ANALYZE == 'true';
 
 const stylesHandler = MiniCssExtractPlugin.loader;
@@ -13,6 +12,9 @@ const stylesHandler = MiniCssExtractPlugin.loader;
 const moduleFederationPlugin = new ModuleFederationPlugin({
   name: 'host',
   filename: 'host.[fullhash].js',
+  remotes: {
+    'workingRemote': 'workingRemote@http://localhost:9002/workingRemote.js'
+  },
   shared: [
     // required shared modules
     { react: { singleton: true, eager: true, requiredVersion: '18.2.0' } },
@@ -20,7 +22,8 @@ const moduleFederationPlugin = new ModuleFederationPlugin({
     // Sharing only used module does not cause the whole index file and its dependencies to be bundles
     {
       '@patternfly/react-core/dist/esm/components/Button': {
-        requiredVersion: '4.276.6',
+        // change version to show module duplication
+        requiredVersion: '4.276.5',
       },
     },
   ],
@@ -83,13 +86,12 @@ const config = {
   resolve: {
     extensions: ['.tsx', '.ts', '.jsx', '.js', '...'],
   },
+  devServer: {
+    port: 8002
+  }
 };
 
 module.exports = () => {
-  if (isProduction) {
-    config.mode = 'production';
-  } else {
-    config.mode = 'development';
-  }
+  config.mode = 'production';
   return config;
 };
