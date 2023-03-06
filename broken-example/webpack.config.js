@@ -32,14 +32,14 @@ const config = {
     module: {
         rules: [
             {
-                test: /\.(js|jsx)$/i,
+                test: /\.(ts|tsx|js|jsx)$/i,
                 use: {
                     loader: 'swc-loader',
                     options: {
                         jsc: {
                             parser: {
-                            syntax: 'typescript',
-                            tsx: true
+                                syntax: 'typescript',
+                                tsx: true
                             }
                         }
                     }
