@@ -13,7 +13,7 @@ const moduleFederationPlugin = new ModuleFederationPlugin({
   name: 'workingRemote',
   filename: 'workingRemote.js',
   exposes: {
-    "./WorkingButton": path.resolve(__dirname, './src/App.tsx')
+    './WorkingButton': path.resolve(__dirname, './src/App.tsx'),
   },
   shared: [
     // required shared modules
@@ -29,13 +29,17 @@ const moduleFederationPlugin = new ModuleFederationPlugin({
 });
 
 const config = {
-  entry: './src/index.ts',
+  entry: './src/empty.ts',
   output: {
     path: path.resolve(__dirname, 'dist'),
   },
   devServer: {
     open: true,
     host: 'localhost',
+    port: 9002,
+    client: {
+      overlay: false,
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -47,7 +51,13 @@ const config = {
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
     moduleFederationPlugin,
-    ...(runAnalyze ? [new BundleAnalyzerPlugin()] : []),
+    ...(runAnalyze
+      ? [
+          new BundleAnalyzerPlugin({
+            analyzerPort: 'auto',
+          }),
+        ]
+      : []),
   ],
   module: {
     rules: [
@@ -85,12 +95,6 @@ const config = {
   resolve: {
     extensions: ['.tsx', '.ts', '.jsx', '.js', '...'],
   },
-  devServer: {
-    port: 9002,
-    client: {
-      overlay: false
-    }
-  }
 };
 
 module.exports = () => {

@@ -14,7 +14,7 @@ const moduleFederationPlugin = new ModuleFederationPlugin({
   name: 'brokenRemote',
   filename: 'brokenRemote.js',
   exposes: {
-    "./BrokenButton": path.resolve(__dirname, './src/App.tsx')
+    './BrokenButton': path.resolve(__dirname, './src/App.tsx'),
   },
   shared: [
     // required shared modules
@@ -30,13 +30,17 @@ const moduleFederationPlugin = new ModuleFederationPlugin({
 });
 
 const config = {
-  entry: './src/index.ts',
+  entry: './src/empty.ts',
   output: {
     path: path.resolve(__dirname, 'dist'),
   },
   devServer: {
     open: true,
     host: 'localhost',
+    port: 9001,
+    client: {
+      overlay: false,
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -48,7 +52,13 @@ const config = {
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
     moduleFederationPlugin,
-    ...(runAnalyze ? [new BundleAnalyzerPlugin()] : []),
+    ...(runAnalyze
+      ? [
+          new BundleAnalyzerPlugin({
+            analyzerPort: 'auto',
+          }),
+        ]
+      : []),
   ],
   module: {
     rules: [
@@ -86,12 +96,6 @@ const config = {
   resolve: {
     extensions: ['.tsx', '.ts', '.jsx', '.js', '...'],
   },
-  devServer: {
-    port: 9001,
-    client: {
-      overlay: false
-    }
-  }
 };
 
 module.exports = () => {

@@ -12,7 +12,8 @@
   "private": "true",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint **/src/*"
+    "lint": "eslint **/src/*",
+    "analyze": "node scripts/analyze.js"
   },
   "repository": {
     "type": "git",
@@ -26,10 +27,13 @@
   "homepage": "https://github.com/Hyperkid123/module-federation-treeshaking#readme",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "concurrently": "^7.6.0",
     "eslint": "^8.35.0",
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.2",
+    "i": "^0.3.7",
+    "npm": "^9.6.0",
     "prettier": "2.8.4"
   }
 }

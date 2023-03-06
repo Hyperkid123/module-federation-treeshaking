@@ -13,7 +13,7 @@ const moduleFederationPlugin = new ModuleFederationPlugin({
   name: 'host',
   filename: 'host.[fullhash].js',
   remotes: {
-    'brokenRemote': 'brokenRemote@http://localhost:9001/brokenRemote.js'
+    brokenRemote: 'brokenRemote@http://localhost:9001/brokenRemote.js',
   },
   shared: [
     // required shared modules
@@ -37,6 +37,7 @@ const config = {
   devServer: {
     open: true,
     host: 'localhost',
+    port: 8001,
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -48,7 +49,13 @@ const config = {
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
     moduleFederationPlugin,
-    ...(runAnalyze ? [new BundleAnalyzerPlugin()] : []),
+    ...(runAnalyze
+      ? [
+          new BundleAnalyzerPlugin({
+            analyzerPort: 'auto',
+          }),
+        ]
+      : []),
   ],
   module: {
     rules: [
@@ -86,9 +93,6 @@ const config = {
   resolve: {
     extensions: ['.tsx', '.ts', '.jsx', '.js', '...'],
   },
-  devServer: {
-    port: 8001
-  }
 };
 
 module.exports = () => {
